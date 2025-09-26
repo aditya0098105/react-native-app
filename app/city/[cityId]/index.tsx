@@ -58,6 +58,11 @@ export const CITY_DATA: Record<string, CityData> = {
       { id: "concert1", title: "Royal Albert Concert", date: "2025-10-12", desc: "Classical music festival." },
       { id: "marathon", title: "London Marathon", date: "2025-11-05", desc: "Annual marathon race." },
     ],
+
+    
+
+
+
   },
 
   "new-york": {
@@ -446,10 +451,39 @@ export default function CityScreen() {
       🚍 View Transportation in {city.name}
     </Text> 
   </TouchableOpacity>
-)}   
+  
+
+  
+)}  
+
+<TouchableOpacity
+  style={[s.card, { marginTop: 20, backgroundColor: "#ffe" }]}
+  onPress={() =>
+    router.push({
+      pathname: "/city/[cityId]/book",
+      params: {
+        cityId: slug,          // city id
+        hotel: "Sample Hotel", // static test hotel
+        city: city.name,       // actual city name
+      },
+    })
+  }
+>
+  <Text style={{ fontWeight: "700", fontSize: 16 }}>
+    📅 Book a Hotel in {city.name}
+  </Text>
+</TouchableOpacity>
 
 
 
+<TouchableOpacity
+  style={[s.card, { marginTop: 20, backgroundColor: "#fef" }]}
+  onPress={() => router.push(`/city/${slug}/bookings`)}
+>
+  <Text style={{ fontWeight: "700", fontSize: 16 }}>
+    📖 View Bookings in {city.name}
+  </Text>
+</TouchableOpacity>
 
 
 

@@ -1,10 +1,17 @@
 // app/_layout.tsx
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { View } from "react-native";
-import { Colors } from "../theme"; // ✅ relative import (no "@/")
+import { initDB } from "../lib/db"; // ✅ db import
+import { Colors } from "../theme";
 
 export default function RootLayout() {
+  // ✅ Run DB init when app starts
+  useEffect(() => {
+    initDB();
+  }, []);
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.bg }}>
       {/* Light theme → status bar text dark */}
@@ -12,10 +19,10 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerTitle: "CityHop",
-          headerTintColor: Colors.text,                    // dark text
-          headerStyle: { backgroundColor: Colors.tabBar }, // white header
-          headerTitleStyle: { fontWeight: "800" },         // (no letterSpacing)
-          contentStyle: { backgroundColor: Colors.bg },    // white page bg
+          headerTintColor: Colors.text,
+          headerStyle: { backgroundColor: Colors.tabBar },
+          headerTitleStyle: { fontWeight: "800" },
+          contentStyle: { backgroundColor: Colors.bg },
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
