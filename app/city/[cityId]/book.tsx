@@ -4,9 +4,8 @@ import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "reac
 import { db } from "../../../lib/db";
 
 export default function BookHotel() {
-  const { hotel, cityId, city } = useLocalSearchParams<{
-    hotel: string;
-    cityId: string; // ✅ ab slug bhi aa raha hai
+  const { cityId, city } = useLocalSearchParams<{
+    cityId: string;
     city: string;
   }>();
 
@@ -20,8 +19,8 @@ export default function BookHotel() {
       await db.runAsync(
         "INSERT INTO bookings (hotel_name, city, customer_name, customer_address, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?)",
         [
-          hotel || "Unknown Hotel",
-          cityId, // ✅ slug store ho raha hai e.g. "new-york"
+           "CityHop Stay Hotel", // ✅ ab fix rakha gaya hotel name (optional)
+          cityId,
           name,
           address,
           start,
@@ -38,31 +37,34 @@ export default function BookHotel() {
 
   return (
     <View style={s.wrap}>
-      <Text style={s.title}>
-        Book {hotel} ({city})
-      </Text>
+      {/* ✅ Heading changed */}
+      <Text style={s.title}>Book a Hotel in {city}</Text>
 
       <TextInput
         style={s.input}
         placeholder="Your Name"
+        placeholderTextColor="#555"
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={s.input}
         placeholder="Your Address"
+        placeholderTextColor="#555"
         value={address}
         onChangeText={setAddress}
       />
       <TextInput
         style={s.input}
         placeholder="Start Date (YYYY-MM-DD)"
+        placeholderTextColor="#555"
         value={start}
         onChangeText={setStart}
       />
       <TextInput
         style={s.input}
         placeholder="End Date (YYYY-MM-DD)"
+        placeholderTextColor="#555"
         value={end}
         onChangeText={setEnd}
       />
@@ -83,6 +85,8 @@ const s = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 8,
+    fontSize: 16,
+    color: "#000",
   },
   btn: {
     backgroundColor: "#007AFF",
@@ -90,5 +94,5 @@ const s = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
-  btnText: { color: "#fff", fontWeight: "700" },
+  btnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
