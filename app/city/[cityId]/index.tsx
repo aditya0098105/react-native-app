@@ -11,13 +11,19 @@ type Place = {
   desc?: string;
   img?: any; // local image via require()
 };
-type CityData = { name: string; country: string; places: Place[] };
+type Event = {
+  id: string;
+  title: string;
+  date: string;
+  desc?: string;
+};
+type CityData = { name: string; country: string; places: Place[]; events?: Event[] };
 
-// ✅ Bullet-proof fallback image (remote URL – no local path issues)
+// ✅ fallback image
 const PLACEHOLDER = { uri: "https://picsum.photos/640/360?cityhop" };
 
-// ------------------- CITY DATA (add img: require("../../../assets/images/<file>.jpg") when available) -------------------
-const CITY_DATA: Record<string, CityData> = {
+// ------------------- CITY DATA (all cities preserved, events added) -------------------
+export const CITY_DATA: Record<string, CityData> = {
   london: {
     name: "London",
     country: "United Kingdom",
@@ -27,22 +33,26 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Buckingham Palace",
         coords: { latitude: 51.5014, longitude: -0.1419 },
         desc: "The monarch’s official residence and iconic ceremonial site.",
-         img: require("../../../assets/images/palace.jpeg"),
+        img: require("../../../assets/images/palace.jpeg"),
       },
       {
         id: "britishmuseum",
         name: "British Museum",
         coords: { latitude: 51.5194, longitude: -0.1269 },
         desc: "World-class collections of art and antiquities, free entry.",
-         img: require("../../../assets/images/mus.webp"),
+        img: require("../../../assets/images/mus.webp"),
       },
       {
         id: "tower",
         name: "Tower of London",
         coords: { latitude: 51.5081, longitude: -0.0759 },
         desc: "Medieval fortress and home of the Crown Jewels.",
-         img: require("../../../assets/images/tower.webp"),
+        img: require("../../../assets/images/tower.webp"),
       },
+    ],
+    events: [
+      { id: "concert1", title: "Royal Albert Concert", date: "2025-10-12", desc: "Classical music festival." },
+      { id: "marathon", title: "London Marathon", date: "2025-11-05", desc: "Annual marathon race." },
     ],
   },
 
@@ -62,15 +72,18 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Central Park",
         coords: { latitude: 40.7829, longitude: -73.9654 },
         desc: "843-acre green escape with lakes, bridges, and trails.",
-         img: require("../../../assets/images/park.jpg"),
+        img: require("../../../assets/images/park.jpg"),
       },
       {
         id: "times",
         name: "Times Square",
         coords: { latitude: 40.758, longitude: -73.9855 },
         desc: "Neon heart of Manhattan with massive billboards.",
-         img: require("../../../assets/images/square.webp"),
+        img: require("../../../assets/images/square.webp"),
       },
+    ],
+    events: [
+      { id: "broadway", title: "Broadway Week", date: "2025-10-18", desc: "Discounted Broadway shows all week." },
     ],
   },
 
@@ -90,16 +103,34 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Mount Victoria Lookout",
         coords: { latitude: -41.2959, longitude: 174.7947 },
         desc: "Panoramic city + harbour views; great at sunset.",
-         img: require("../../../assets/images/w2.jpg"),
+        img: require("../../../assets/images/w2.jpg"),
       },
       {
         id: "cablecar",
         name: "Wellington Cable Car",
         coords: { latitude: -41.2907, longitude: 174.776 },
         desc: "Historic red cable car from Lambton Quay to Kelburn.",
-         img: require("../../../assets/images/w3.jpg"),
+        img: require("../../../assets/images/w3.jpg"),
       },
     ],
+    events: [ { 
+      id: "filmfest", 
+      title: "New Zealand International Film Festival", 
+      date: "2025-07-15", 
+      desc: "Showcasing international and local films across Wellington cinemas." 
+    },
+    { 
+      id: "cubadupa", 
+      title: "CubaDupa Street Festival", 
+      date: "2025-03-22", 
+      desc: "Annual street festival with live music, dance, art, and food on Cuba Street." 
+    },
+    { 
+      id: "worldofwearableart", 
+      title: "World of WearableArt Show", 
+      date: "2025-09-25", 
+      desc: "Spectacular live show combining fashion, art, and performance." 
+    },], 
   },
 
   paris: {
@@ -111,14 +142,14 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Eiffel Tower",
         coords: { latitude: 48.8584, longitude: 2.2945 },
         desc: "Paris’ iron icon; best views from Trocadéro and Champ de Mars.",
-         img: require("../../../assets/images/etower.jpeg"),
+        img: require("../../../assets/images/etower.jpeg"),
       },
       {
         id: "louvre",
         name: "Louvre Museum",
         coords: { latitude: 48.8606, longitude: 2.3376 },
         desc: "World’s largest art museum; home to the Mona Lisa.",
-         img: require("../../../assets/images/mus2.webp"),
+        img: require("../../../assets/images/mus2.webp"),
       },
       {
         id: "notredame",
@@ -127,6 +158,10 @@ const CITY_DATA: Record<string, CityData> = {
         desc: "Gothic cathedral on Île de la Cité; restoration ongoing.",
         img: require("../../../assets/images/dam.jpeg"),
       },
+    ],
+    events: [
+      { id: "fashion", title: "Paris Fashion Week", date: "2025-10-20", desc: "Global fashion week." },
+      { id: "wine", title: "Wine Festival", date: "2025-11-15", desc: "Celebration of French wine." },
     ],
   },
 
@@ -139,23 +174,25 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Hawa Mahal",
         coords: { latitude: 26.9239, longitude: 75.8267 },
         desc: "‘Palace of Winds’ with honeycomb windows for royal women.",
-         img: require("../../../assets/images/j1.jpeg"),
+        img: require("../../../assets/images/j1.jpeg"),
       },
       {
         id: "amberfort",
         name: "Amber (Amer) Fort",
         coords: { latitude: 26.9855, longitude: 75.8513 },
         desc: "Hilltop fort with ornate courtyards and mirror work.",
-         img: require("../../../assets/images/j2.jpg"),
+        img: require("../../../assets/images/j2.jpg"),
       },
       {
         id: "citypalace",
         name: "City Palace",
         coords: { latitude: 26.9258, longitude: 75.8246 },
         desc: "Royal residence showcasing Rajput and Mughal architecture.",
-         img: require("../../../assets/images/j3.png"),
+        img: require("../../../assets/images/j3.png"),
       },
     ],
+    events: [ { id: "festival1", title: "Jaipur Literature Festival", date: "2025-01-28", desc: "World’s largest free literary festival." },
+    { id: "festival2", title: "Teej Festival", date: "2025-08-10", desc: "Traditional festival for monsoon with cultural programs." },],
   },
 
   cherrapunji: {
@@ -167,23 +204,25 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Nohkalikai Falls",
         coords: { latitude: 25.2828, longitude: 91.6964 },
         desc: "One of India’s tallest plunge waterfalls with emerald pool.",
-         img: require("../../../assets/images/c1.jpg"),
+        img: require("../../../assets/images/c1.jpg"),
       },
       {
         id: "rootbridge",
         name: "Double Decker Root Bridge (Nongriat)",
         coords: { latitude: 25.2421, longitude: 91.7215 },
         desc: "Living root bridge built over decades by Khasi locals.",
-         img: require("../../../assets/images/c2.jpg"),
+        img: require("../../../assets/images/c2.jpg"),
       },
       {
         id: "mawsmai",
         name: "Mawsmai Cave",
         coords: { latitude: 25.2718, longitude: 91.7306 },
         desc: "Limestone cave with easy walkways and formations.",
-         img: require("../../../assets/images/c3.jpg"),
+        img: require("../../../assets/images/c3.jpg"),
       },
     ],
+    events: [ { id: "festival", title: "Wangala Festival", date: "2025-11-12", desc: "Harvest festival of the Garo tribe with dance and music." },
+    { id: "eco", title: "Cherrapunji Eco Tourism Fair", date: "2025-05-18", desc: "Promoting eco-tourism and local culture." },],
   },
 
   tuscany: {
@@ -202,16 +241,18 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Leaning Tower of Pisa",
         coords: { latitude: 43.7229, longitude: 10.3966 },
         desc: "Iconic tilted bell tower in Piazza dei Miracoli.",
-         img: require("../../../assets/images/tus2.webp"),
+        img: require("../../../assets/images/tus2.webp"),
       },
       {
         id: "siena",
         name: "Piazza del Campo, Siena",
         coords: { latitude: 43.3188, longitude: 11.3317 },
         desc: "Shell-shaped square hosting the Palio horse race.",
-         img: require("../../../assets/images/tus3.webp"),
+        img: require("../../../assets/images/tus3.webp"),
       },
     ],
+    events: [{ id: "palio", title: "Palio di Siena", date: "2025-07-02", desc: "Historic horse race in Siena’s Piazza del Campo." },
+    { id: "wine", title: "Chianti Wine Festival", date: "2025-09-10", desc: "Celebration of Tuscany’s famous wines." },],
   },
 
   zurich: {
@@ -223,14 +264,14 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Lake Zurich Promenade",
         coords: { latitude: 47.3663, longitude: 8.5417 },
         desc: "Scenic lakeside walk; boat piers and swans at Bürkliplatz.",
-         img: require("../../../assets/images/zu1.jpeg"),
+        img: require("../../../assets/images/zu1.jpeg"),
       },
       {
         id: "oldtown",
         name: "Old Town (Niederdorf)",
         coords: { latitude: 47.3725, longitude: 8.5436 },
         desc: "Cobbled lanes, cafes, and churches along the Limmat.",
-         img: require("../../../assets/images/zu2.jpeg"),
+        img: require("../../../assets/images/zu2.jpeg"),
       },
       {
         id: "uetliberg",
@@ -240,6 +281,8 @@ const CITY_DATA: Record<string, CityData> = {
         img: require("../../../assets/images/zu3.webp"),
       },
     ],
+    events: [{ id: "street", title: "Street Parade", date: "2025-08-02", desc: "One of the largest techno parades in the world." },
+    { id: "fest", title: "Sechseläuten", date: "2025-04-14", desc: "Spring festival with the burning of the Böögg." },],
   },
 
   himalayas: {
@@ -251,7 +294,7 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Rohtang Pass (Himachal)",
         coords: { latitude: 32.3667, longitude: 77.2484 },
         desc: "High mountain pass near Manali; snow vistas in season.",
-         img: require("../../../assets/images/h1.webp"),
+        img: require("../../../assets/images/h1.webp"),
       },
       {
         id: "pangong",
@@ -265,12 +308,13 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Kedarnath Temple (Uttarakhand)",
         coords: { latitude: 30.7352, longitude: 79.0669 },
         desc: "Ancient Shiva shrine amid dramatic peaks.",
-         img: require("../../../assets/images/h3.webp"),
+        img: require("../../../assets/images/h3.webp"),
       },
     ],
+    events: [    { id: "trek", title: "Himalayan Adventure Festival", date: "2025-06-20", desc: "Celebration of trekking, climbing, and outdoor life." },
+    { id: "spiti", title: "Spiti Tribal Fair", date: "2025-09-05", desc: "Showcasing culture and traditions of Spiti Valley." },],
   },
 
-  // ✅ Tokyo (was missing earlier)
   tokyo: {
     name: "Tokyo",
     country: "Japan",
@@ -280,23 +324,25 @@ const CITY_DATA: Record<string, CityData> = {
         name: "Tokyo Skytree",
         coords: { latitude: 35.7101, longitude: 139.8107 },
         desc: "634m broadcasting tower with observation decks.",
-         img: require("../../../assets/images/tree.webp"),
+        img: require("../../../assets/images/tree.webp"),
       },
       {
         id: "sensoji",
         name: "Senso-ji Temple (Asakusa)",
         coords: { latitude: 35.7148, longitude: 139.7967 },
         desc: "Tokyo’s oldest temple; Nakamise shopping street nearby.",
-         img: require("../../../assets/images/temple.jpeg"),
+        img: require("../../../assets/images/temple.jpeg"),
       },
       {
         id: "shibuya",
         name: "Shibuya Crossing",
         coords: { latitude: 35.6595, longitude: 139.7005 },
         desc: "Famous scramble crossing beside Shibuya Station.",
-         img: require("../../../assets/images/corss.jpg"),
+        img: require("../../../assets/images/corss.jpg"),
       },
     ],
+    events: [{ id: "sakura", title: "Cherry Blossom Festival", date: "2025-04-01", desc: "Viewing of blooming sakura trees across Tokyo." },
+    { id: "anime", title: "Tokyo Anime Fair", date: "2025-03-18", desc: "One of the largest anime conventions worldwide." },],
   },
 };
 // --------------------------------------------------------------------------------------------------
@@ -358,17 +404,9 @@ export default function CityScreen() {
             style={s.card}
             activeOpacity={0.9}
             onPress={() =>
-              router.push({
-                pathname: `/city/${slug}/place/${item.id}`,
-                params: {
-                  name: item.name,
-                  lat: String(item.coords.latitude),
-                  lon: String(item.coords.longitude),
-                  cityName: city.name,
-                  country: city.country,
-                  desc: item.desc ?? "",
-                },
-              } as any)
+              router.push(
+                `/city/${slug}/place/${item.id}?name=${encodeURIComponent(item.name)}&lat=${item.coords.latitude}&lon=${item.coords.longitude}&cityName=${encodeURIComponent(city.name)}&country=${encodeURIComponent(city.country)}&desc=${encodeURIComponent(item.desc ?? "")}`
+              )
             }
           >
             <Image source={item.img || PLACEHOLDER} style={s.thumb} resizeMode="cover" />
@@ -379,6 +417,16 @@ export default function CityScreen() {
           </TouchableOpacity>
         )}
       />
+
+      {/* Events button (shows only if events exist) */}
+      {city.events && city.events.length > 0 && (
+        <TouchableOpacity
+          style={[s.card, { marginTop: 20, backgroundColor: "#eef" }]}
+          onPress={() => router.push(`/city/${slug}/events?cityName=${encodeURIComponent(city.name)}`)}
+        >
+          <Text style={{ fontWeight: "700", fontSize: 16 }}>🎉 View Events in {city.name}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
