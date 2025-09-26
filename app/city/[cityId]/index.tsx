@@ -19,6 +19,10 @@ type Event = {
 };
 type CityData = { name: string; country: string; places: Place[]; events?: Event[] };
 
+
+
+
+
 // ✅ fallback image
 const PLACEHOLDER = { uri: "https://picsum.photos/640/360?cityhop" };
 
@@ -427,6 +431,28 @@ export default function CityScreen() {
           <Text style={{ fontWeight: "700", fontSize: 16 }}>🎉 View Events in {city.name}</Text>
         </TouchableOpacity>
       )}
+
+
+
+
+      {city && (//yhaaaa lagaya h
+  <TouchableOpacity
+    style={[s.card, { marginTop: 20, backgroundColor: "#efe" }]}
+    onPress={() =>
+      router.push(`/city/${slug}/transport?cityName=${encodeURIComponent(city.name)}`)
+    }
+  >
+    <Text style={{ fontWeight: "700", fontSize: 16 }}>
+      🚍 View Transportation in {city.name}
+    </Text> 
+  </TouchableOpacity>
+)}   
+
+
+
+
+
+
     </View>
   );
 }
